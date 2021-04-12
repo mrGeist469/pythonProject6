@@ -17,6 +17,13 @@ class Student:
         else:
             return 'Ошибка'
 
+    def __str__(self):
+        return f'Имя: {self.name}\n' \
+               f'Фамилия: {self.surname}\n' \
+               f'Средняя оценка за домашнее задание: {self.grades}\n' \
+               f'Курсы в процессе изучения: {self.courses_in_progress}\n' \
+               f'Завершенные курсы: {self.finished_courses}\n\n'
+
 
 class Mentor:
     def __init__(self, name, surname):
@@ -44,9 +51,11 @@ class Lecturers(Mentor):
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
+best_student.courses_in_progress += ['Git']
 
 cool_reviewers = Reviewers('Some', 'Buddy')
 cool_reviewers.courses_attached += ['Python']
+cool_reviewers.courses_attached += ['Git']
 
 cool_lecturer = Lecturers('Some', 'Buddy')
 cool_lecturer.courses_attached += ['Python']
@@ -58,6 +67,9 @@ best_student.rate_lw(cool_lecturer, 'Python', 10)
 cool_reviewers.rate_hw(best_student, 'Python', 10)
 cool_reviewers.rate_hw(best_student, 'Python', 8)
 cool_reviewers.rate_hw(best_student, 'Python', 9)
+cool_reviewers.rate_hw(best_student, 'Git', 9)
+cool_reviewers.rate_hw(best_student, 'Git', 9)
 
 print(best_student.grades)
 print(cool_lecturer.grades)
+print(best_student)
