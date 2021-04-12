@@ -42,6 +42,10 @@ class Reviewers(Mentor):
         else:
             return 'Ошибка'
 
+    def __str__(self):
+        return f'Имя: {self.name}\n' \
+               f'Фамилия: {self.surname}\n\n'
+
 
 class Lecturers(Mentor):
     def __init__(self, name, surname):
@@ -63,6 +67,7 @@ cool_lecturer.courses_attached += ['Python']
 best_student.rate_lw(cool_lecturer, 'Python', 10)
 best_student.rate_lw(cool_lecturer, 'Python', 8)
 best_student.rate_lw(cool_lecturer, 'Python', 10)
+best_student.rate_lw(cool_lecturer, 'Git', 10)
 
 cool_reviewers.rate_hw(best_student, 'Python', 10)
 cool_reviewers.rate_hw(best_student, 'Python', 8)
