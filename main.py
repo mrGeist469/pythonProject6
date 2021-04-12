@@ -7,6 +7,16 @@ class Student:
         self.courses_in_progress = []
         self.grades = {}
 
+    def rate_lw(self, lecturer, course, grade):
+        if isinstance(lecturer, Lecturers) and course in lecturer.courses_attached \
+                and course in self.courses_in_progress:
+            if course in lecturer.grades:
+                lecturer.grades[course] += [grade]
+            else:
+                lecturer.grades[course] = [grade]
+        else:
+            return 'Ошибка'
+
 
 class Mentor:
     def __init__(self, name, surname):
@@ -27,10 +37,9 @@ class Reviewers(Mentor):
 
 
 class Lecturers(Mentor):
-    def __init__(self, name):
+    def __init__(self, name, surname):
         super().__init__(self, name)
         self.grades = {}
-
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
@@ -39,8 +48,16 @@ best_student.courses_in_progress += ['Python']
 cool_reviewers = Reviewers('Some', 'Buddy')
 cool_reviewers.courses_attached += ['Python']
 
+cool_lecturer = Lecturers('Some', 'Buddy')
+cool_lecturer.courses_attached += ['Python']
+
+best_student.rate_lw(cool_lecturer, 'Python', 10)
+best_student.rate_lw(cool_lecturer, 'Python', 8)
+best_student.rate_lw(cool_lecturer, 'Python', 10)
+
 cool_reviewers.rate_hw(best_student, 'Python', 10)
-cool_reviewers.rate_hw(best_student, 'Python', 10)
-cool_reviewers.rate_hw(best_student, 'Python', 10)
+cool_reviewers.rate_hw(best_student, 'Python', 8)
+cool_reviewers.rate_hw(best_student, 'Python', 9)
 
 print(best_student.grades)
+print(cool_lecturer.grades)
