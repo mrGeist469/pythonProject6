@@ -1,3 +1,16 @@
+def average_grade(human):
+    if isinstance(human, Lecturers) or isinstance(human, Student):
+        summa = 0
+        num = 0
+        for i in human.grades:
+            summa += sum(human.grades[i])
+            num += len(human.grades[i])
+        try:
+            return summa / num
+        except ZeroDivisionError:
+            return 0
+
+
 class Student:
     def __init__(self, name, surname, gender):
         self.name = name
@@ -20,7 +33,7 @@ class Student:
     def __str__(self):
         return f'Имя: {self.name}\n' \
                f'Фамилия: {self.surname}\n' \
-               f'Средняя оценка за домашнее задание: {self.grades}\n' \
+               f'Средняя оценка за домашнее задание: {average_grade(self)}\n' \
                f'Курсы в процессе изучения: {self.courses_in_progress}\n' \
                f'Завершенные курсы: {self.finished_courses}\n\n'
 
@@ -55,8 +68,7 @@ class Lecturers(Mentor):
     def __str__(self):
         return f'Имя: {self.name}\n' \
                f'Фамилия: {self.surname}\n' \
-               f'Средняя оценка за лекции: {self.grades}\n\n'
-    pass
+               f'Средняя оценка за лекции: {average_grade(self)}\n\n'
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
