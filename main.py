@@ -74,19 +74,38 @@ class Lecturers(Mentor):
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
 best_student.courses_in_progress += ['Git']
+best_student.finished_courses += ['Введение в программирование']
+
+some_student = Student('Rita', 'Smitt', 'your_gender')
+some_student.courses_in_progress += ['Python']
+some_student.courses_in_progress += ['Git']
+some_student.finished_courses += ['Введение в программирование']
 
 cool_reviewers = Reviewers('Some', 'Buddy')
 cool_reviewers.courses_attached += ['Python']
 cool_reviewers.courses_attached += ['Git']
 
+some_reviewers = Reviewers('Sem', 'Green')
+some_reviewers.courses_attached += ['Python']
+some_reviewers.courses_attached += ['Git']
+
 cool_lecturer = Lecturers('Some', 'Buddy')
 cool_lecturer.courses_attached += ['Python']
 cool_lecturer.courses_attached += ['Git']
+
+some_lecturer = Lecturers('Sem', 'Green')
+some_lecturer.courses_attached += ['Python']
+some_lecturer.courses_attached += ['Git']
 
 best_student.rate_lw(cool_lecturer, 'Python', 10)
 best_student.rate_lw(cool_lecturer, 'Python', 8)
 best_student.rate_lw(cool_lecturer, 'Python', 10)
 best_student.rate_lw(cool_lecturer, 'Git', 10)
+some_student.rate_lw(some_lecturer, 'Python', 10)
+some_student.rate_lw(some_lecturer, 'Python', 7)
+some_student.rate_lw(some_lecturer, 'Python', 8)
+some_student.rate_lw(some_lecturer, 'Git', 9)
+some_student.rate_lw(some_lecturer, 'Git', 7)
 
 cool_reviewers.rate_hw(best_student, 'Python', 10)
 cool_reviewers.rate_hw(best_student, 'Python', 8)
@@ -94,7 +113,15 @@ cool_reviewers.rate_hw(best_student, 'Python', 9)
 cool_reviewers.rate_hw(best_student, 'Git', 9)
 cool_reviewers.rate_hw(best_student, 'Git', 9)
 
-print(best_student.grades)
-print(cool_lecturer.grades)
+some_reviewers.rate_hw(some_student, 'Python', 9)
+some_reviewers.rate_hw(some_student, 'Python', 8)
+some_reviewers.rate_hw(some_student, 'Python', 6)
+some_reviewers.rate_hw(some_student, 'Git', 8)
+some_reviewers.rate_hw(some_student, 'Git', 9)
+
+print(cool_reviewers)
+print(some_reviewers)
 print(best_student)
+print(some_student)
 print(cool_lecturer)
+print(some_lecturer)
