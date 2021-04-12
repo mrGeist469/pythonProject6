@@ -49,8 +49,14 @@ class Reviewers(Mentor):
 
 class Lecturers(Mentor):
     def __init__(self, name, surname):
-        super().__init__(self, name)
+        super().__init__(name, surname)
         self.grades = {}
+
+    def __str__(self):
+        return f'Имя: {self.name}\n' \
+               f'Фамилия: {self.surname}\n' \
+               f'Средняя оценка за лекции: {self.grades}\n\n'
+    pass
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
@@ -63,6 +69,7 @@ cool_reviewers.courses_attached += ['Git']
 
 cool_lecturer = Lecturers('Some', 'Buddy')
 cool_lecturer.courses_attached += ['Python']
+cool_lecturer.courses_attached += ['Git']
 
 best_student.rate_lw(cool_lecturer, 'Python', 10)
 best_student.rate_lw(cool_lecturer, 'Python', 8)
@@ -78,3 +85,4 @@ cool_reviewers.rate_hw(best_student, 'Git', 9)
 print(best_student.grades)
 print(cool_lecturer.grades)
 print(best_student)
+print(cool_lecturer)
