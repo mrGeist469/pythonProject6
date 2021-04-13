@@ -11,7 +11,22 @@ def average_grade(human):
             return 0
 
 
+def average_group(list_of_human):
+    mid = 0
+    num = 0
+    if isinstance(list_of_human[0], Student) or isinstance(list_of_human[0], Lecturers):
+        for i in list_of_human:
+            mid += average_grade(i)
+            num += 1
+    try:
+        return mid / num
+    except ZeroDivisionError:
+        return 0
+
+
 class Student:
+    all_students = []
+
     def __init__(self, name, surname, gender):
         self.name = name
         self.surname = surname
@@ -19,6 +34,7 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
+        Student.all_students.append(self)
 
     def rate_lw(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturers) and course in lecturer.courses_attached \
@@ -35,7 +51,10 @@ class Student:
                f'Фамилия: {self.surname}\n' \
                f'Средняя оценка за домашнее задание: {average_grade(self)}\n' \
                f'Курсы в процессе изучения: {self.courses_in_progress}\n' \
-               f'Завершенные курсы: {self.finished_courses}\n\n'
+               f'Завершенные курсы: {self.finished_courses}\n'
+
+    def __lt__(self, student):
+        return average_grade(self) < average_grade(student)
 
 
 class Mentor:
@@ -57,18 +76,24 @@ class Reviewers(Mentor):
 
     def __str__(self):
         return f'Имя: {self.name}\n' \
-               f'Фамилия: {self.surname}\n\n'
+               f'Фамилия: {self.surname}\n'
 
 
 class Lecturers(Mentor):
+    all_lecturers = []
+
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades = {}
+        Lecturers.all_lecturers.append(self)
 
     def __str__(self):
         return f'Имя: {self.name}\n' \
                f'Фамилия: {self.surname}\n' \
-               f'Средняя оценка за лекции: {average_grade(self)}\n\n'
+               f'Средняя оценка за лекции: {average_grade(self)}\n'
+
+    def __lt__(self, lecturer):
+        return average_grade(self) < average_grade(lecturer)
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
@@ -101,6 +126,7 @@ best_student.rate_lw(cool_lecturer, 'Python', 10)
 best_student.rate_lw(cool_lecturer, 'Python', 8)
 best_student.rate_lw(cool_lecturer, 'Python', 10)
 best_student.rate_lw(cool_lecturer, 'Git', 10)
+best_student.rate_lw(cool_lecturer, 'Git', 10)
 some_student.rate_lw(some_lecturer, 'Python', 10)
 some_student.rate_lw(some_lecturer, 'Python', 7)
 some_student.rate_lw(some_lecturer, 'Python', 8)
@@ -125,3 +151,9 @@ print(best_student)
 print(some_student)
 print(cool_lecturer)
 print(some_lecturer)
+
+print(f'Средняя оценка студентов: {round(average_group(Student.all_students), 3)}')
+print(f'Средняя оценка лекторов: {round(average_group(Lecturers.all_lecturers), 3)}\n')
+
+print(cool_lecturer < some_lecturer)
+print(some_student < best_student)
