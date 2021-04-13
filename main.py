@@ -1,27 +1,44 @@
 def average_grade(human):
     if isinstance(human, Lecturers) or isinstance(human, Student):
         summa = 0
-        num = 0
+        weight = 0
         for i in human.grades:
             summa += sum(human.grades[i])
-            num += len(human.grades[i])
+            weight += len(human.grades[i])
         try:
-            return summa / num
+            return summa / weight
         except ZeroDivisionError:
-            return 0
+            return 'Нет оценок'
 
 
 def average_group(list_of_human):
-    mid = 0
-    num = 0
+    summa = 0
+
     if isinstance(list_of_human[0], Student) or isinstance(list_of_human[0], Lecturers):
         for i in list_of_human:
-            mid += average_grade(i)
-            num += 1
+            summa += average_grade(i)
     try:
-        return mid / num
+        return summa / len(list_of_human)
     except ZeroDivisionError:
         return 0
+
+
+def average_group_course(list_of_human, course):  # Альтернативная функция подсчета средней оценки по курсу
+    summa = 0
+    weight = 0
+    result = 0
+    if isinstance(list_of_human[0], Student) or isinstance(list_of_human[0], Lecturers):
+        for human in list_of_human:
+            for i in human.grades[course]:
+                summa += sum([i])
+                weight += len([i])
+                result = summa / weight
+    try:
+        return f'Средняя оценка по курсу {course}: {round(result, 2)}'
+    except ZeroDivisionError:
+        return 'Нет оценок'
+    except KeyError:
+        return 'Не корректно указан курс'
 
 
 class Student:
@@ -35,6 +52,14 @@ class Student:
         self.courses_in_progress = []
         self.grades = {}
         Student.all_students.append(self)
+
+    def average_grade(self, course):
+        if course in self.courses_in_progress and len(self.grades[course]) > 0:
+            result = sum(self.grades[course]) / len(self.grades[course])
+            return f'Средняя оценка студента "{self.name} {self.surname}" за курс ' \
+                   f'"{course}": {round(result, 2)}'
+        else:
+            return 'Ошибка'
 
     def rate_lw(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturers) and course in lecturer.courses_attached \
@@ -51,7 +76,8 @@ class Student:
                f'Фамилия: {self.surname}\n' \
                f'Средняя оценка за домашнее задание: {average_grade(self)}\n' \
                f'Курсы в процессе изучения: {self.courses_in_progress}\n' \
-               f'Завершенные курсы: {self.finished_courses}\n'
+               f'Завершенные курсы: {self.finished_courses}\n' \
+
 
     def __lt__(self, student):
         return average_grade(self) < average_grade(student)
@@ -86,6 +112,14 @@ class Lecturers(Mentor):
         super().__init__(name, surname)
         self.grades = {}
         Lecturers.all_lecturers.append(self)
+
+    def average_grade(self, course):
+        if course in self.courses_attached and len(self.grades[course]) > 0:
+            result = sum(self.grades[course]) / len(self.grades[course])
+            return f'Средняя оценка студента "{self.name} {self.surname}" за курс ' \
+                   f'"{course}": {round(result, 2)}'
+        else:
+            return 'Ошибка'
 
     def __str__(self):
         return f'Имя: {self.name}\n' \
@@ -152,8 +186,14 @@ print(some_student)
 print(cool_lecturer)
 print(some_lecturer)
 
-print(f'Средняя оценка студентов: {round(average_group(Student.all_students), 3)}')
-print(f'Средняя оценка лекторов: {round(average_group(Lecturers.all_lecturers), 3)}\n')
+print(f'Средняя оценка студентов: {round(average_group(Student.all_students), 2)}')
+print(f'Средняя оценка лекторов: {round(average_group(Lecturers.all_lecturers), 2)}\n')
+
+print(average_group_course(Student.all_students, 'Python'))  # Вызов альтернативной функции посчета средней
+# оценки по курсу
+print(average_group_course(Student.all_students, 'Git'))
+print(average_group_course(Lecturers.all_lecturers, 'Python'))
+print(average_group_course(Lecturers.all_lecturers, 'Git'))
 
 print(cool_lecturer < some_lecturer)
 print(some_student < best_student)
