@@ -1,4 +1,4 @@
-def average_grade(human):
+def average_grade_human(human):
     if isinstance(human, Lecturers) or isinstance(human, Student):
         summa = 0
         weight = 0
@@ -16,7 +16,7 @@ def average_group(list_of_human):
 
     if isinstance(list_of_human[0], Student) or isinstance(list_of_human[0], Lecturers):
         for i in list_of_human:
-            summa += average_grade(i)
+            summa += average_grade_human(i)
     try:
         return summa / len(list_of_human)
     except ZeroDivisionError:
@@ -41,6 +41,24 @@ def average_group_course(list_of_human, course):  # Альтернативная
         return 'Не корректно указан курс'
 
 
+def average_course_group_student(course, *students):
+    summa = 0
+    count = 0
+    for student in students:
+        summa += Student.average_grade(student, course)
+        count += 1
+    return f'Средняя оценка студентов за задания по курсу {course}: {round(summa / count, 2)}'
+
+
+def average_course_group_lecturer(course, *lecturers):
+    summa = 0
+    count = 0
+    for lecturer in lecturers:
+        summa += Lecturers.average_grade(lecturer, course)
+        count += 1
+    return f'Средняя оценка лекторов за лекции по курсу {course}: {round(summa / count, 2)}'
+
+
 class Student:
     all_students = []
 
@@ -56,8 +74,7 @@ class Student:
     def average_grade(self, course):
         if course in self.courses_in_progress and len(self.grades[course]) > 0:
             result = sum(self.grades[course]) / len(self.grades[course])
-            return f'Средняя оценка студента "{self.name} {self.surname}" за курс ' \
-                   f'"{course}": {round(result, 2)}'
+            return result
         else:
             return 'Ошибка'
 
@@ -74,13 +91,13 @@ class Student:
     def __str__(self):
         return f'Имя: {self.name}\n' \
                f'Фамилия: {self.surname}\n' \
-               f'Средняя оценка за домашнее задание: {average_grade(self)}\n' \
+               f'Средняя оценка за домашнее задание: {average_grade_human(self)}\n' \
                f'Курсы в процессе изучения: {self.courses_in_progress}\n' \
                f'Завершенные курсы: {self.finished_courses}\n' \
 
 
     def __lt__(self, student):
-        return average_grade(self) < average_grade(student)
+        return average_grade_human(self) < average_grade_human(student)
 
 
 class Mentor:
@@ -116,18 +133,17 @@ class Lecturers(Mentor):
     def average_grade(self, course):
         if course in self.courses_attached and len(self.grades[course]) > 0:
             result = sum(self.grades[course]) / len(self.grades[course])
-            return f'Средняя оценка студента "{self.name} {self.surname}" за курс ' \
-                   f'"{course}": {round(result, 2)}'
+            return result
         else:
             return 'Ошибка'
 
     def __str__(self):
         return f'Имя: {self.name}\n' \
                f'Фамилия: {self.surname}\n' \
-               f'Средняя оценка за лекции: {average_grade(self)}\n'
+               f'Средняя оценка за лекции: {average_grade_human(self)}\n'
 
     def __lt__(self, lecturer):
-        return average_grade(self) < average_grade(lecturer)
+        return average_grade_human(self) < average_grade_human(lecturer)
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
@@ -161,6 +177,7 @@ best_student.rate_lw(cool_lecturer, 'Python', 8)
 best_student.rate_lw(cool_lecturer, 'Python', 10)
 best_student.rate_lw(cool_lecturer, 'Git', 10)
 best_student.rate_lw(cool_lecturer, 'Git', 10)
+
 some_student.rate_lw(some_lecturer, 'Python', 10)
 some_student.rate_lw(some_lecturer, 'Python', 7)
 some_student.rate_lw(some_lecturer, 'Python', 8)
@@ -194,6 +211,11 @@ print(average_group_course(Student.all_students, 'Python'))  # Вызов аль
 print(average_group_course(Student.all_students, 'Git'))
 print(average_group_course(Lecturers.all_lecturers, 'Python'))
 print(average_group_course(Lecturers.all_lecturers, 'Git'))
-
+print()
+print(average_course_group_student('Python', best_student, some_student))
+print(average_course_group_lecturer('Python', cool_lecturer, some_lecturer))
+print(average_course_group_student('Git', best_student, some_student))
+print(average_course_group_lecturer('Git', cool_lecturer, some_lecturer))
+print()
 print(cool_lecturer < some_lecturer)
 print(some_student < best_student)
