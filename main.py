@@ -13,7 +13,6 @@ def average_grade_human(human):
 
 def average_group(list_of_human):
     summa = 0
-
     if isinstance(list_of_human[0], Student) or isinstance(list_of_human[0], Lecturers):
         for i in list_of_human:
             summa += average_grade_human(i)
@@ -27,12 +26,11 @@ def average_group_course(list_of_human, course):  # Альтернативная
     summa = 0
     weight = 0
     result = 0
-    if isinstance(list_of_human[0], Student) or isinstance(list_of_human[0], Lecturers):
-        for human in list_of_human:
-            for i in human.grades[course]:
-                summa += sum([i])
-                weight += len([i])
-                result = summa / weight
+    for human in list_of_human:
+        for i in human.grades[course]:
+            summa += sum([i])
+            weight += len([i])
+            result = summa / weight
     try:
         return f'Средняя оценка по курсу {course}: {round(result, 2)}'
     except ZeroDivisionError:
