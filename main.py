@@ -41,20 +41,16 @@ def average_group_course(list_of_human, course):  # Альтернативная
 
 def average_course_group_student(course, *students):
     summa = 0
-    count = 0
     for student in students:
         summa += Student.average_grade(student, course)
-        count += 1
-    return f'Средняя оценка студентов за задания по курсу {course}: {round(summa / count, 2)}'
+    return f'Средняя оценка студентов за задания по курсу {course}: {round(summa / len(students), 2)}'
 
 
 def average_course_group_lecturer(course, *lecturers):
     summa = 0
-    count = 0
     for lecturer in lecturers:
         summa += Lecturers.average_grade(lecturer, course)
-        count += 1
-    return f'Средняя оценка лекторов за лекции по курсу {course}: {round(summa / count, 2)}'
+    return f'Средняя оценка лекторов за лекции по курсу {course}: {round(summa / len(lecturers), 2)}'
 
 
 class Student:
